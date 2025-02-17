@@ -8,9 +8,10 @@
 
 int main(void)
 {
-    SCB->VTOR = 0x8001000;
+    SCB->VTOR = 0x8004000;
+    __enable_irq();
     /* Perform hardware initialisation */
-    bsp_init();  
+    bsp_init();
 
     struct led led_heartbeat = {
         .port = GPIOC,
@@ -20,6 +21,7 @@ int main(void)
 
     gpio_output_init(led_heartbeat.port, led_heartbeat.pin);
 
+    /*
     struct usart_config usart_dev = {
         .self = USART1,
         .apb_bus_freq = 64000000,
@@ -32,6 +34,7 @@ int main(void)
         .irq_mode = 0,
     };
     usart_init(&usart_dev);
+    */
 
     while (1) {
         led_toggle(&led_heartbeat);

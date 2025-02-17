@@ -4,8 +4,8 @@
 #include <stm32f1xx_ll_utils.h>
 #include <stm32f1xx_ll_cortex.h>
 
-void
-rcc_config(void) {
+void rcc_config(void)
+{
 
     /* Enabling HSI crystal/ceramic resonator */
     LL_RCC_HSI_Enable();
