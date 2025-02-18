@@ -1,3 +1,6 @@
 [submodule "bootloader"]
 	path = bootloader
 	url = https://github.com/iamadahn/stm32iamboot
+[submodule "freertos-kernel"]
+	path = freertos-kernel
+	url = https://github.com/FreeRTOS/FreeRTOS-Kernel

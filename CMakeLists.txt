@@ -85,6 +85,25 @@ target_link_libraries(${PROJECT_NAME}.elf
     usart_driver
 )
 
+add_library(freertos_config INTERFACE)
+target_include_directories(freertos_config SYSTEM
+    INTERFACE
+        ${CMAKE_SOURCE_DIR}/src/sys)
+target_compile_definitions(freertos_config
+    INTERFACE
+        projCOVERAGE_TEST=0
+)
+
+set( FREERTOS_HEAP "4" CACHE STRING "" FORCE)
+# Select the cross-compile PORT
+set(FREERTOS_PORT "GCC_ARM_CM3" CACHE STRING "" FORCE)
+
+add_subdirectory(${CMAKE_SOURCE_DIR}/freertos-kernel)
+
+target_link_libraries(${PROJECT_NAME}.elf
+    freertos_kernel
+)
+
 set(HEX_FILE ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.hex)
 set(BIN_FILE ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.bin)
 
