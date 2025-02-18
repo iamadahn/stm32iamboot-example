@@ -1,22 +1,22 @@
 #include "rcc.h"
 
 #include <stm32f1xx_ll_rcc.h>
+#include <stm32f1xx_ll_bus.h>
 #include <stm32f1xx_ll_utils.h>
 #include <stm32f1xx_ll_cortex.h>
 
 void rcc_config(void)
 {
-
     /* Enabling HSI crystal/ceramic resonator */
-    LL_RCC_HSI_Enable();
+    LL_RCC_HSE_Enable();
 
     /* Waiting for HSI to start */
-    while (LL_RCC_HSI_IsReady() != 1) {
+    while (LL_RCC_HSE_IsReady() != 1) {
         ;
     }
 
     /* HSE value is 8 MHz, so we set PPLMul to 16 in order to get 64 MHz on PLLCLK and SYSCLK*/
-    LL_RCC_PLL_ConfigDomain_SYS(LL_RCC_PLLSOURCE_HSI_DIV_2, LL_RCC_PLL_MUL_16);
+    LL_RCC_PLL_ConfigDomain_SYS(LL_RCC_PLLSOURCE_HSE, LL_RCC_PLL_MUL_9);
 
     /* Enabling PLLCLK on System Clock Mux */
     LL_RCC_PLL_Enable();
@@ -44,11 +44,11 @@ void rcc_config(void)
     }
 
     /* Setting time base source to SysTick */
-    LL_Init1msTick(64000000);
+    LL_Init1msTick(72000000);
 
     /* Configure SysTick clock source */
     LL_SYSTICK_SetClkSource(LL_SYSTICK_CLKSOURCE_HCLK);
 
     /* Setting system core clock to 72 MHz */
-    LL_SetSystemCoreClock(64000000);
+    LL_SetSystemCoreClock(72000000);
 }
