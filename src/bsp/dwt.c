@@ -31,7 +31,7 @@ void dwt_init(void)
 void dwt_delay(uint32_t us) // microseconds
 {
     uint32_t startTick = DWT->CYCCNT,
-             delayTicks = us * (64000000/1000000);
+             delayTicks = us * (72000000/1000000);
 
     while (DWT->CYCCNT - startTick < delayTicks);
 }
