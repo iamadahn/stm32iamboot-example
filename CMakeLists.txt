@@ -75,6 +75,7 @@ add_link_options(-T ${LINKER_SCRIPT})
 
 add_executable(${PROJECT_NAME}.elf ${SOURCES} ${LINKER_SCRIPT})
 
+# Drivers
 add_subdirectory(${CMAKE_SOURCE_DIR}/src/drivers/gpio)
 add_subdirectory(${CMAKE_SOURCE_DIR}/src/drivers/led)
 add_subdirectory(${CMAKE_SOURCE_DIR}/src/drivers/usart)
@@ -85,6 +86,7 @@ target_link_libraries(${PROJECT_NAME}.elf
     usart_driver
 )
 
+# FreeRTOS library and config start
 add_library(freertos_config INTERFACE)
 target_include_directories(freertos_config SYSTEM
     INTERFACE
@@ -104,6 +106,7 @@ target_link_libraries(${PROJECT_NAME}.elf
     freertos_kernel
 )
 
+# Configure output artifacts
 set(HEX_FILE ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.hex)
 set(BIN_FILE ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.bin)
 
@@ -113,9 +116,19 @@ add_custom_command(TARGET ${PROJECT_NAME}.elf POST_BUILD
         COMMENT "Building ${HEX_FILE}
 Building ${BIN_FILE}")
 
+# Custom command to build bootloader
+# Bootloader requires 4 KiB of FLASH memory, which is 0x1000 in hex
+# So the application can use all what's left
+set(BOOTLOADER_CONFIG_DEFINES
+    -DFLASH_BOOT_START_ADDR=0x08000000
+    -DFLASH_APP_START_ADDR=0x080001000
+    -DFLASH_PAGES=128           # The full amount of FLASH pages mcu has
+    -DFLASH_PAGE_SIZE=1024
+)
+
 add_custom_target(
     build_iamboot_bootloader
-    COMMAND ${CMAKE_COMMAND} -S ${CMAKE_SOURCE_DIR}/bootloader -B ${CMAKE_BINARY_DIR}/bootloader -GNinja
+    COMMAND ${CMAKE_COMMAND} ${BOOTLOADER_CONFIG_DEFINES} -S ${CMAKE_SOURCE_DIR}/bootloader -B ${CMAKE_BINARY_DIR}/bootloader -GNinja 
     COMMAND ${CMAKE_COMMAND} --build ${CMAKE_BINARY_DIR}/bootloader
     COMMAND ${CMAKE_COMMAND} --build ${CMAKE_BINARY_DIR}/bootloader --target=build_iamboot_app
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}

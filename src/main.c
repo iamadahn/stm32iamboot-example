@@ -16,8 +16,6 @@ static void serial_task(void *pv_arg);
 
 int main(void)
 {
-    SCB->VTOR = 0x8001000;
-    __enable_irq();
     /* Perform hardware initialisation */
     bsp_init();
 
