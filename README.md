@@ -7,7 +7,7 @@ The only needed configuration is located at bottom of CMakeLists.txt in the root
 set(BOOTLOADER_CONFIG_DEFINES
     -DFLASH_BOOT_START_ADDR=0x08000000
     -DFLASH_APP_START_ADDR=0x080001000
-    -DFLASH_PAGES=128           # The full amount of FLASH pages mcu has
+    -DFLASH_PAGES=128
     -DFLASH_PAGE_SIZE=1024
     -DUSE_USART1_PA9_PA10=1
     -DSTM32F103xB=1
