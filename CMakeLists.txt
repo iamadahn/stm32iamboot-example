@@ -124,6 +124,8 @@ set(BOOTLOADER_CONFIG_DEFINES
     -DFLASH_APP_START_ADDR=0x080001000
     -DFLASH_PAGES=128           # The full amount of FLASH pages mcu has
     -DFLASH_PAGE_SIZE=1024
+    -DUSE_USART1_PA9_PA10=1
+    -DSTM32F103xB=1
 )
 
 add_custom_target(
